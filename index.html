@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Teknik Informatika — Universitas Ibn Khaldun Bogor</title>
+  <meta name="description" content="Program Studi Teknik Informatika Universitas Ibn Khaldun Bogor — 4 peminatan unggulan: SE, CSN, GIT, KERIS." />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            navy: '#101C2C',
+            teal: '#183B50',
+            'teal-light': '#4B9B9A',
+            soft: '#EAF1F3',
+            white: '#FFFFFF',
+            gold: '#C9A961',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'float-slow': 'float 8s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 20s linear infinite',
+            'gradient-shift': 'gradientShift 8s ease infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            gradientShift: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- ============ CUSTOM CSS ============ -->
+  <style>
+    /* Kunci layar dari geser kanan-kiri (ANTI OVERFLOW) */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden !important;
+      position: relative;
+    }
+
+    /* Hero Background */
+    .hero-bg {
+      background-image: url('assets/img/bg/images.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* Dropdown Transition */
+    .dropdown-menu {
+      opacity: 0; visibility: hidden; transform: translateY(10px);
+      transition: all 0.25s ease; pointer-events: none;
+    }
+    .group:hover .dropdown-menu, .dropdown-menu.show {
+      opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+    }
+
+    /* Modal Transition */
+    .modal-overlay {
+      opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1; visibility: visible;
+    }
+    .modal-content {
+      transform: scale(0.95); transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    /* Gallery Grid - 2 BANJAR DI MOBILE */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Default mobile 2 kolom */
+      grid-auto-rows: 200px;
+      gap: 1rem;
+    }
+    
+    /* Desktop Layout */
+    @media (min-width: 1024px) {
+      .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+      .gal-tall { grid-row: span 2; grid-column: span 1; }
+      .gal-wide { grid-row: span 1; grid-column: span 2; }
+      .gal-square { grid-row: span 1; grid-column: span 1; }
+      .gal-large { grid-row: span 2; grid-column: span 2; }
+    }
+
+    /* Tablet Layout */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 250px; }
+      .gal-large { grid-row: span 1; grid-column: span 2; }
+    }
+
+    /* Mobile Layout (2 Kolom) */
+    @media (max-width: 767px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; gap: 0.5rem; }
+      .gal-tall, .gal-wide, .gal-square, .gal-large { grid-row: span 1; grid-column: span 1; }
+    }
+
+    /* Lightbox */
+    #lightbox { opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+    #lightbox.active { opacity: 1; visibility: visible; }
+
+    /* Gelombang Divider */
+    .wave-divider {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .wave-divider svg {
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 60px;
+    }
+    @media (min-width: 768px) {
+      .wave-divider svg { height: 100px; }
+    }
+
+    /* Hide Scrollbar */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Scroll Progress Bar */
+    #scrollProgress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, #4B9B9A, #C9A961);
+      z-index: 999; width: 0%; transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(75, 155, 154, 0.5);
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(135deg, #183B50 0%, #4B9B9A 50%, #C9A961 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
+    }
+
+    /* Hero Orbs */
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.4; pointer-events: none;
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    /* Scroll indicator bounce */
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(10px); opacity: 0.5; }
+    }
+    .scroll-indicator { animation: scrollBounce 2s ease-in-out infinite; }
+
+    /* Card hover glow */
+    .hover-glow { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-glow:hover {
+      box-shadow: 0 20px 60px -15px rgba(75, 155, 154, 0.4);
+      transform: translateY(-6px);
+    }
+
+    /* Back to top */
+    #backToTop {
+      opacity: 0; visibility: hidden; transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+    #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    /* CTA gradient */
+    .cta-gradient {
+      background: linear-gradient(135deg, #101C2C 0%, #183B50 50%, #4B9B9A 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    /* Pattern dots */
+    .pattern-dots {
+      background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Hero title glow */
+    .hero-title-glow { text-shadow: 0 4px 30px rgba(16, 28, 44, 0.15); }
+
+    /* Marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: marquee 30s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+  </style>
+</head>
+
+<body class="font-sans bg-soft text-navy antialiased overflow-x-hidden">
+
+  <!-- ============ SCROLL PROGRESS ============ -->
+  <div id="scrollProgress"></div>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-2rem)] max-w-6xl px-4">
+    <nav class="flex items-center justify-between gap-4 px-3 py-2.5 rounded-full bg-white/90 backdrop-blur-xl border border-white/70 shadow-lg relative">
+      <a href="#hero" class="flex items-center gap-3 pl-2 shrink-0">
+        <img src="assets/img/logo/prodi.png" alt="Logo uika" class="w-8 h-8 object-contain" />
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="font-display font-semibold text-sm text-navy">Teknik Informatika</span>
+        </span>
+      </a>
+
+      <!-- Menu Desktop -->
+      <ul class="hidden lg:flex items-center gap-1">
+        <li><a href="#hero" class="px-3 py-2 text-[13px] font-semibold text-teal transition">Beranda</a></li>
+        <li class="relative group">
+          <button class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition flex items-center gap-1 focus:outline-none">
+            Peminatan
+            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" stroke-width="2.5"/></svg>
+          </button>
+          <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 w-[520px] mt-2 p-2 rounded-3xl bg-white border border-gray-100 shadow-xl">
+            <div class="grid grid-cols-2 gap-1">
+              <a href="lab-se.html" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-soft transition">
+                <div class="w-10 h-10 rounded-xl bg-teal/5 flex items-center justify-center font-bold text-teal text-sm">SE</div>
+                <div class="flex flex-col">
+                  <span class="font-semibold text-[13px] text-navy">Software Engineering</span>
+                  <span class="text-[11px] text-navy/50">Rekayasa perangkat lunak</span>
+                </div>
+              </a>
+              <a href="lab-csn.html" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-soft transition">
+                <div class="w-10 h-10 rounded-xl bg-teal/5 flex items-center justify-center font-bold text-teal text-xs">CSN</div>
+                <div class="flex flex-col">
+                  <span class="font-semibold text-[13px] text-navy">Computer System & Network</span>
+                  <span class="text-[11px] text-navy/50">Jaringan & keamanan</span>
+                </div>
+              </a>
+              <a href="lab-git.html" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-soft transition">
+                <div class="w-10 h-10 rounded-xl bg-teal/5 flex items-center justify-center font-bold text-teal text-xs">GIT</div>
+                <div class="flex flex-col">
+                  <span class="font-semibold text-[13px] text-navy">Geospatial Info. Tech.</span>
+                  <span class="text-[11px] text-navy/50">SIG & spasial</span>
+                </div>
+              </a>
+              <a href="lab-keris.html" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-soft transition">
+                <div class="w-10 h-10 rounded-xl bg-teal/5 flex items-center justify-center font-bold text-teal text-[9px]">KERIS</div>
+                <div class="flex flex-col">
+                  <span class="font-semibold text-[13px] text-navy">Knowledge Engineering</span>
+                  <span class="text-[11px] text-navy/50">AI & sistem cerdas</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li><a href="#about" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Tentang</a></li>
+        <li><a href="#dosen" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Dosen</a></li>
+        <li><a href="#prestasi" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Prestasi</a></li>
+        <li><a href="#gallery" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Galeri</a></li>
+      </ul>
+
+      <div class="flex items-center gap-2 relative">
+        <!-- Search Bar Desktop -->
+        <div class="hidden md:block relative">
+          <div class="relative">
+            <input type="text" id="searchInput" placeholder="Cari..." class="w-32 xl:w-48 pl-9 pr-3 py-1.5 rounded-full bg-navy/5 border border-transparent focus:bg-white focus:border-teal-light focus:outline-none focus:ring-1 focus:ring-teal-light/50 text-xs text-navy transition-all duration-300" autocomplete="off">
+            <svg class="w-4 h-4 text-navy/40 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <div id="searchResults" class="absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hidden z-[110]">
+            <div id="searchResultsList" class="max-h-[60vh] overflow-y-auto p-2 space-y-1 hide-scrollbar"></div>
+          </div>
+        </div>
+
+        <a href="#cta" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-navy text-white text-[13px] font-medium hover:bg-teal transition shadow-sm shrink-0">
+          Daftar
+        </a>
+        <button id="burger" class="lg:hidden w-8 h-8 rounded-full bg-navy/5 flex flex-col items-center justify-center gap-1 shrink-0" aria-label="Menu" aria-expanded="false">
+          <span class="w-3.5 h-0.5 bg-navy rounded transition"></span>
+          <span class="w-3.5 h-0.5 bg-navy rounded transition"></span>
+          <span class="w-3.5 h-0.5 bg-navy rounded transition"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Menu Mobile -->
+    <div id="mobileMenu" class="lg:hidden mt-2 p-2 rounded-3xl bg-white border border-gray-100 shadow-lg hidden">
+      <div class="relative mb-2 px-2 pt-2">
+        <input type="text" id="searchInputMobile" placeholder="Cari di halaman ini..." class="w-full pl-9 pr-3 py-2 rounded-xl bg-navy/5 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-light/50 text-sm text-navy" autocomplete="off">
+        <svg class="w-4 h-4 text-navy/40 absolute left-5 top-[22px] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <div id="searchResultsMobile" class="hidden mb-2 max-h-48 overflow-y-auto rounded-xl bg-soft/50 p-1"></div>
+      
+      <ul class="flex flex-col gap-1">
+        <li><a href="#hero" class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-navy/5 text-navy">Beranda</a></li>
+        <li>
+          <button id="mobileDropBtn" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-navy hover:bg-gray-50 transition">
+            Peminatan
+            <svg class="w-4 h-4 text-navy/50 transition-transform" id="mobileArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" stroke-width="2.5"/></svg>
+          </button>
+          <div id="mobileDropdown" class="dropdown-menu hidden pl-4 mt-1 space-y-1">
+            <a href="lab-se.html" class="block px-4 py-2 text-[13px] text-navy/70 hover:text-teal transition">Software Engineering</a>
+            <a href="lab-csn.html" class="block px-4 py-2 text-[13px] text-navy/70 hover:text-teal transition">Computer System & Network</a>
+            <a href="lab-git.html" class="block px-4 py-2 text-[13px] text-navy/70 hover:text-teal transition">Geospatial Info. Tech.</a>
+            <a href="lab-keris.html" class="block px-4 py-2 text-[13px] text-navy/70 hover:text-teal transition">Knowledge Engineering</a>
+          </div>
+        </li>
+        <li><a href="#about" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-navy hover:bg-gray-50 transition">Tentang</a></li>
+        <li><a href="#dosen" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-navy hover:bg-gray-50 transition">Dosen</a></li>
+        <li><a href="#prestasi" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-navy hover:bg-gray-50 transition">Prestasi</a></li>
+        <li><a href="#gallery" class="block px-4 py-2.5 rounded-xl text-sm font-medium text-navy hover:bg-gray-50 transition">Galeri</a></li>
+        <li><a href="#cta" class="block px-4 py-2.5 rounded-xl text-sm font-semibold bg-teal text-white text-center">Daftar Sekarang</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ============ HERO SECTION ============ -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-20">
+    <div class="hero-bg absolute inset-0 z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-soft/40 via-soft/20 to-soft z-10"></div>
+
+    <!-- Decorative Orbs -->
+    <div class="hero-orb w-96 h-96 bg-teal-light -top-20 -left-20 animate-float-slow"></div>
+    <div class="hero-orb w-80 h-80 bg-gold/40 top-1/3 -right-20 animate-float"></div>
+    <div class="hero-orb w-72 h-72 bg-teal/30 bottom-0 left-1/3 animate-float-slow" style="animation-delay: 2s;"></div>
+
+    <div class="relative z-20 container mx-auto px-6 pt-16 text-center flex flex-col items-center">
+      <!-- Logo badge -->
+      <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-4 px-5 py-2.5 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-sm mb-8">
+        <img src="assets/img/logo/uika.png" alt="UIKA" class="h-6 object-contain opacity-80" />
+        <span class="w-px h-4 bg-navy/15"></span>
+        <img src="assets/img/logo/prodi.png" alt="Prodi TI" class="h-6 object-contain opacity-80" />
+        <span class="w-px h-4 bg-navy/15"></span>
+        <img src="assets/img/logo/hima.png" alt="HIMA" class="h-6 object-contain opacity-80" />
+      </div>
+
+      <!-- Title -->
+      <h1 data-aos="fade-up" data-aos-duration="900" class="hero-title-glow font-display font-semibold text-navy text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight mb-5">
+        Selamat Datang di<br />
+        <span class="gradient-text">Prodi Teknik Informatika</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p data-aos="fade-up" data-aos-duration="900" data-aos-delay="150" class="text-sm sm:text-base md:text-lg text-navy/70 font-normal max-w-2xl mx-auto mb-10 leading-relaxed">
+        Empat peminatan unggulan — <span class="font-semibold text-teal">SE, CSN, GIT, dan KERIS</span> — dalam satu ekosistem belajar di Universitas Ibn Khaldun Bogor.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div data-aos="fade-up" data-aos-duration="900" data-aos-delay="300" class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16">
+        <a href="#peminatan" class="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-teal text-white font-medium text-sm hover:-translate-y-0.5 hover:shadow-xl transition-all shadow-md">
+          Jelajahi Peminatan
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#about" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/80 backdrop-blur border border-navy/10 text-navy font-medium text-sm hover:bg-white hover:shadow-lg transition shadow-sm">
+          Tentang TI
+        </a>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator mt-12 text-navy/40">
+        <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+      </div>
+    </div>
+
+    <!-- Gelombang Bawah Hero -->
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ 4 PEMINATAN ============ -->
+  <section id="peminatan" class="relative py-24 bg-soft">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Peminatan</p>
+        <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Empat Jalur Keahlian</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Pilih jalur yang paling sesuai dengan minat dan karier impianmu.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- SE -->
+        <div data-aos="fade-up" data-aos-delay="0" class="bg-white p-8 rounded-3xl border border-navy/5 shadow-sm hover-glow group">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-teal/5 flex items-center justify-center text-teal font-bold text-xl group-hover:bg-teal group-hover:text-white transition duration-300">SE</div>
+            <span class="text-xs font-semibold text-teal-light bg-teal-light/10 px-3 py-1 rounded-full">Software Engineering</span>
+          </div>
+          <h3 class="font-semibold text-xl text-navy mb-3 group-hover:text-teal transition">Rekayasa Perangkat Lunak</h3>
+          <p class="text-sm text-navy/60 leading-relaxed mb-6">Mendalami arsitektur sistem, pengembangan aplikasi modern, dan rekayasa perangkat lunak yang andal.</p>
+          <a href="lab-se.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:text-teal-light transition">Selengkapnya <span class="group-hover:translate-x-1 transition-transform inline-block">→</span></a>
+        </div>
+
+        <!-- CSN -->
+        <div data-aos="fade-up" data-aos-delay="100" class="bg-white p-8 rounded-3xl border border-navy/5 shadow-sm hover-glow group">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-teal/5 flex items-center justify-center text-teal font-bold text-xl group-hover:bg-teal group-hover:text-white transition duration-300">CSN</div>
+            <span class="text-xs font-semibold text-teal-light bg-teal-light/10 px-3 py-1 rounded-full">Computer System & Network</span>
+          </div>
+          <h3 class="font-semibold text-xl text-navy mb-3 group-hover:text-teal transition">Jaringan & Keamanan Siber</h3>
+          <p class="text-sm text-navy/60 leading-relaxed mb-6">Fokus pada infrastruktur jaringan, keamanan siber, dan sistem terdistribusi yang kompleks.</p>
+          <a href="lab-csn.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:text-teal-light transition">Selengkapnya <span class="group-hover:translate-x-1 transition-transform inline-block">→</span></a>
+        </div>
+
+        <!-- GIT -->
+        <div data-aos="fade-up" data-aos-delay="200" class="bg-white p-8 rounded-3xl border border-navy/5 shadow-sm hover-glow group">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-teal/5 flex items-center justify-center text-teal font-bold text-xl group-hover:bg-teal group-hover:text-white transition duration-300">GIT</div>
+            <span class="text-xs font-semibold text-teal-light bg-teal-light/10 px-3 py-1 rounded-full">Geospatial Info. Tech.</span>
+          </div>
+          <h3 class="font-semibold text-xl text-navy mb-3 group-hover:text-teal transition">Teknologi Informasi Spasial</h3>
+          <p class="text-sm text-navy/60 leading-relaxed mb-6">Menguasai sistem informasi geografis, penginderaan jauh, dan analisis data spasial untuk pemetaan modern.</p>
+          <a href="lab-git.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:text-teal-light transition">Selengkapnya <span class="group-hover:translate-x-1 transition-transform inline-block">→</span></a>
+        </div>
+
+        <!-- KERIS -->
+        <div data-aos="fade-up" data-aos-delay="300" class="bg-white p-8 rounded-3xl border border-navy/5 shadow-sm hover-glow group">
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-teal/5 flex items-center justify-center text-teal font-bold text-xl group-hover:bg-teal group-hover:text-white transition duration-300">KERIS</div>
+            <span class="text-xs font-semibold text-teal-light bg-teal-light/10 px-3 py-1 rounded-full">Knowledge Engineering</span>
+          </div>
+          <h3 class="font-semibold text-xl text-navy mb-3 group-hover:text-teal transition">Kecerdasan Buatan</h3>
+          <p class="text-sm text-navy/60 leading-relaxed mb-6">Mendalami AI, sistem cerdas, dan rekayasa pengetahuan untuk menciptakan solusi inovatif berbasis data.</p>
+          <a href="lab-keris.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:text-teal-light transition">Selengkapnya <span class="group-hover:translate-x-1 transition-transform inline-block">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gelombang Bawah -->
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ KENAPA PILIH TI ============ -->
+  <section id="kenapa" class="relative py-24 bg-white">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Keunggulan</p>
+        <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Kenapa Pilih TI UIKA?</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Enam alasan mengapa Teknik Informatika UIKA adalah pilihan tepat untuk masa depanmu.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div data-aos="fade-up" data-aos-delay="0" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Kurikulum Berbasis Industri</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Dirancang bersama praktisi industri untuk memastikan lulusan siap kerja dan relevan dengan kebutuhan pasar.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div data-aos="fade-up" data-aos-delay="100" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Laboratorium Modern</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Fasilitas praktikum lengkap — dari perangkat lunak, jaringan, AI, hingga geospasial dengan perangkat terkini.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div data-aos="fade-up" data-aos-delay="200" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Dosen Berpengalaman</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Diampu oleh dosen bergelar S3 dan praktisi bersertifikasi dengan pengalaman industri bertaraf nasional.</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div data-aos="fade-up" data-aos-delay="300" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Akreditasi A</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Program studi terakreditasi A dengan pengakuan kualitas pendidikan di tingkat nasional.</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div data-aos="fade-up" data-aos-delay="400" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Program Magang & Startup</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Jaringan mitra industri luas dengan program magang bersertifikat dan inkubasi startup mahasiswa.</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div data-aos="fade-up" data-aos-delay="500" class="bg-gradient-to-br from-soft to-white p-7 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-14 h-14 rounded-2xl bg-teal text-white flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-300 shadow-lg">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          </div>
+          <h3 class="font-semibold text-lg text-navy mb-2 group-hover:text-teal transition">Suasana Islami</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Mengintegrasikan nilai-nilai keislaman dalam setiap aspek pembelajaran untuk membentuk pribadi unggul.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT / TENTANG ============ -->
+  <section id="about" class="relative py-24 bg-soft">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <div data-aos="fade-right" data-aos-duration="800" class="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-video bg-navy group cursor-pointer" onclick="openVideoModal()">
+          <img src="https://img.youtube.com/vi/9CzEftVJJTQ/maxresdefault.jpg" alt="Video Profil" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-20 h-20 bg-teal/90 text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition duration-300 animate-pulse-slow">
+              <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-navy to-transparent">
+            <p class="text-white font-medium text-sm">Video Profil Program Studi</p>
+          </div>
+        </div>
+
+        <div data-aos="fade-left" data-aos-duration="800">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Tentang Kami</p>
+          <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy mb-6 leading-tight tracking-tight">Membangun Talenta Digital Masa Depan</h2>
+          <p class="text-navy/70 leading-relaxed mb-6 text-sm">
+            Program Studi Teknik Informatika Universitas Ibn Khaldun Bogor hadir sebagai wadah bagi para inovator muda untuk menguasai teknologi terkini. Kami menggabungkan fondasi akademik yang kuat dengan praktik industri nyata.
+          </p>
+          <p class="text-navy/70 leading-relaxed mb-8 text-sm">
+            Dengan dukungan dosen berpengalaman dan fasilitas laboratorium modern, kami siap mencetak lulusan yang siap bersaing di kancah global.
+          </p>
+
+          <button onclick="openStrukturModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-teal/10 text-teal text-sm font-semibold hover:bg-teal hover:text-white transition duration-300 mb-8">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Lihat Struktur Organisasi
+          </button>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm">
+              <div class="font-bold text-2xl text-teal mb-1">4</div>
+              <div class="text-xs font-medium text-navy/60">Peminatan Unggulan</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm">
+              <div class="font-bold text-2xl text-teal mb-1">A</div>
+              <div class="text-xs font-medium text-navy/60">Akreditasi Program Studi</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ VISI & MISI ============ -->
+  <section id="visimisi" class="relative py-24 bg-white">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-20">
+      
+      <!-- VISI -->
+      <div data-aos="zoom-in" data-aos-duration="800" class="bg-navy text-white rounded-3xl p-8 md:p-10 shadow-xl relative overflow-hidden mb-8">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-teal rounded-full mix-blend-screen filter blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-gold rounded-full mix-blend-screen filter blur-3xl opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+        
+        <div class="relative z-10 text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-teal-light">Visi</span>
+          </div>
+          <p class="text-base md:text-lg leading-relaxed italic text-white/90">
+            "Menjadi Fakultas yang Islami dan Unggul dalam Riset di Bidang Teknik dan Sains untuk Mendukung Daya Saing Global pada Tahun 2040"
+          </p>
+        </div>
+      </div>
+
+      <!-- MISI -->
+      <div data-aos="fade-up" data-aos-duration="800" class="bg-soft rounded-3xl p-8 md:p-10 shadow-sm border border-navy/5">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center text-teal shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          </div>
+          <h3 class="font-semibold text-xl text-navy">Misi Fakultas</h3>
+        </div>
+
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3" data-aos="fade-left" data-aos-delay="0">
+            <span class="w-5 h-5 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-1">1</span>
+            <p class="text-sm text-navy/70 leading-relaxed">Menyelenggarakan pendidikan tinggi di bidang teknik dan sains yang bermutu, berstandar internasional, dan berlandaskan nilai-nilai keislaman untuk membentuk lulusan yang kompeten, berakhlak mulia, dan siap menjadi pemimpin umat.</p>
+          </li>
+          <li class="flex items-start gap-3" data-aos="fade-left" data-aos-delay="100">
+            <span class="w-5 h-5 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-1">2</span>
+            <p class="text-sm text-navy/70 leading-relaxed">Melaksanakan penelitian yang unggul, inovatif, dan relevan secara nasional maupun global dalam pengembangan ilmu teknik dan sains berbasis nilai-nilai Islam.</p>
+          </li>
+          <li class="flex items-start gap-3" data-aos="fade-left" data-aos-delay="200">
+            <span class="w-5 h-5 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-1">3</span>
+            <p class="text-sm text-navy/70 leading-relaxed">Mengembangkan kegiatan pengabdian kepada masyarakat yang solutif, berbasis hasil penelitian, dan selaras dengan kebutuhan umat.</p>
+          </li>
+          <li class="flex items-start gap-3" data-aos="fade-left" data-aos-delay="300">
+            <span class="w-5 h-5 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-1">4</span>
+            <p class="text-sm text-navy/70 leading-relaxed">Mewujudkan tata kelola fakultas yang profesional, akuntabel, dan berorientasi pada pencapaian akreditasi unggul nasional serta sertifikasi internasional.</p>
+          </li>
+          <li class="flex items-start gap-3" data-aos="fade-left" data-aos-delay="400">
+            <span class="w-5 h-5 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-1">5</span>
+            <p class="text-sm text-navy/70 leading-relaxed">Membangun jejaring kolaboratif di tingkat nasional dan internasional dalam bidang pendidikan, penelitian, dan pengabdian.</p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ LABORATORIUM ============ -->
+  <section id="lab" class="relative py-24 bg-soft">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Fasilitas</p>
+        <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Laboratorium Pendukung</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Sarana praktik terbaik untuk menunjang kompetensi mahasiswa.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Lab SE -->
+        <div data-aos="fade-up" data-aos-delay="0" class="bg-white rounded-3xl overflow-hidden shadow-sm border border-navy/5 hover-glow group">
+          <div class="aspect-video bg-navy/5 relative overflow-hidden">
+            <img src="assets/img/lab/se.jpg" alt="Lab Software Engineering" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-base text-navy mb-2 leading-tight">Lab Rekayasa Perangkat Lunak</h3>
+            <p class="text-xs text-navy/60 leading-relaxed">Pusat pengembangan aplikasi, pengujian perangkat lunak, dan kolaborasi proyek mahasiswa.</p>
+          </div>
+        </div>
+
+        <!-- Lab CSN -->
+        <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-3xl overflow-hidden shadow-sm border border-navy/5 hover-glow group">
+          <div class="aspect-video bg-navy/5 relative overflow-hidden">
+            <img src="assets/img/lab/csn.jpg" alt="Lab Jaringan" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-base text-navy mb-2 leading-tight">Lab Jaringan & Keamanan</h3>
+            <p class="text-xs text-navy/60 leading-relaxed">Fasilitas konfigurasi jaringan, simulasi siber, dan praktikum keamanan informasi.</p>
+          </div>
+        </div>
+
+        <!-- Lab KERIS -->
+        <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-3xl overflow-hidden shadow-sm border border-navy/5 hover-glow group">
+          <div class="aspect-video bg-navy/5 relative overflow-hidden">
+            <img src="assets/img/lab/keris.jpg" alt="Lab Kecerdasan Buatan" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-base text-navy mb-2 leading-tight">Lab Kecerdasan Buatan</h3>
+            <p class="text-xs text-navy/60 leading-relaxed">Pusat riset machine learning, pengolahan data, dan pengembangan sistem cerdas.</p>
+          </div>
+        </div>
+
+        <!-- Lab GIT -->
+        <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-3xl overflow-hidden shadow-sm border border-navy/5 hover-glow group">
+          <div class="aspect-video bg-navy/5 relative overflow-hidden">
+            <img src="assets/img/lab/git.jpg" alt="Lab Geospasial" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-base text-navy mb-2 leading-tight">Lab Geospasial & Multimedia</h3>
+            <p class="text-xs text-navy/60 leading-relaxed">Pusat analisis spasial, pemetaan digital, dan pengembangan media interaktif.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ PROSPEK KARIER ============ -->
+  <section id="karier" class="relative py-24 bg-white">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Lulusan</p>
+        <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Prospek Karier</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Peluang karier luas sesuai dengan peminatan yang kamu pilih.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div data-aos="fade-right" data-aos-delay="0" class="bg-soft p-6 rounded-3xl border border-navy/5 hover-glow">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-teal/10 text-teal flex items-center justify-center font-bold">SE</div>
+            <h3 class="font-semibold text-lg text-navy">Software Engineering</h3>
+          </div>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Software Engineer</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Web Developer</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Mobile Developer</li>
+          </ul>
+        </div>
+
+        <div data-aos="fade-left" data-aos-delay="0" class="bg-soft p-6 rounded-3xl border border-navy/5 hover-glow">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-teal/10 text-teal flex items-center justify-center font-bold">CSN</div>
+            <h3 class="font-semibold text-lg text-navy">Computer System & Network</h3>
+          </div>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Network Engineer</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cybersecurity Specialist</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> System Administrator</li>
+          </ul>
+        </div>
+
+        <div data-aos="fade-right" data-aos-delay="100" class="bg-soft p-6 rounded-3xl border border-navy/5 hover-glow">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-teal/10 text-teal flex items-center justify-center font-bold">GIT</div>
+            <h3 class="font-semibold text-lg text-navy">Geospatial Info. Tech.</h3>
+          </div>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> GIS Analyst</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Remote Sensing Specialist</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cartographer</li>
+          </ul>
+        </div>
+
+        <div data-aos="fade-left" data-aos-delay="100" class="bg-soft p-6 rounded-3xl border border-navy/5 hover-glow">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-teal/10 text-teal flex items-center justify-center font-bold">KERIS</div>
+            <h3 class="font-semibold text-lg text-navy">Knowledge Engineering</h3>
+          </div>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> AI / ML Engineer</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Data Scientist</li>
+            <li class="flex items-center gap-2 text-sm text-navy/70"><svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Data Analyst</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ DOSEN ============ -->
+  <section id="dosen" class="relative py-24 bg-soft">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6" data-aos="fade-up">
+        <div class="text-left max-w-2xl">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Pengajar</p>
+          <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Dosen & Tenaga Pengajar</h2>
+          <div class="w-16 h-0.5 bg-teal-light mt-5 mb-4"></div>
+          <p class="text-navy/60 text-sm">Didukung oleh para ahli di bidang teknologi informasi.</p>
+        </div>
+        
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="btn-prev" class="w-12 h-12 rounded-full bg-white text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Sebelumnya">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button id="btn-next" class="w-12 h-12 rounded-full bg-white text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Selanjutnya">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pembungkus Slider Dosen (Responsive 2 kolom di Mobile) -->
+      <div class="w-full overflow-hidden">
+        <div id="slider-track" class="flex transition-transform duration-500 ease-in-out">
+          
+          <!-- Page 1 -->
+          <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dosen 1 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Hersanto.jpg" alt="Hersanto Fajri" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Hersanto Fajri, S. Ds.,M.M.D.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2833764665130312</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Ketua Program Studi</div>
+              </div>
+            </div>
+            <!-- Dosen 2 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Fety.jpg" alt="Fety Fatimah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Fety Fatimah, S. Kom., M. Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2362759660230183</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Sekretaris Program Studi</div>
+              </div>
+            </div>
+            <!-- Dosen 3 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Hendri.jpg" alt="Ade Hendri Hendrawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Ade Hendri Hendrawan, S.Kom., M.Kom.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 3335746647130093</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium CSN</div>
+              </div>
+            </div>
+            <!-- Dosen 4 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Berlin.jpg" alt="Berlina Wulandari" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Berlina Wulandari, S.T., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 5344769670230343</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page 2 -->
+          <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dosen 5 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Erwin.jpg" alt="Dr. Erwin Hermawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Dr. Erwin Hermawan, S.Si., M. Sc. IT.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 1458760661130162</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium GIT</div>
+              </div>
+            </div>
+            <!-- Dosen 6 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Fitrah.jpg" alt="Fitrah Satrya Fajar Kusumah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Fitrah Satrya Fajar Kusumah, S.Kom., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2843767668130542</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium</div>
+              </div>
+            </div>
+            <!-- Dosen 7 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Ritzkal.jpg" alt="Dr. Ritzkal" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Dr. Ritzkal, S.Kom., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 3851764665110042</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium</div>
+              </div>
+            </div>
+            <!-- Dosen 8 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Puspa.jpg" alt="Dr. Puspa Eosina" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Dr. Puspa Eosina, S.Si., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 8661749650230082</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Kepala Laboratorium KERIS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page 3 -->
+          <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dosen 9 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Yugo.jpg" alt="Yuggo Afrianto" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Yuggo Afrianto, S.T., M.Kom.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 9443765666130222</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Wakil Dekan Akademik</div>
+              </div>
+            </div>
+            <!-- Dosen 10 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_safar.jpg" alt="Safaruddin Hidayat Al Ikhsan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Safaruddin Hidayat Al Ikhsan, S. Kom., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 6436763664130193</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Wakil Dekan Sumber Daya</div>
+              </div>
+            </div>
+            <!-- Dosen 11 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Aftaf.jpg" alt="Mohammad Aftaf Muhajir" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Mohammad Aftaf Muhajir, S.Si., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 9251767668131053</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 12 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Sahid.jpg" alt="Sahid Agustian Hudjimartsu" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Sahid Agustian Hudjimartsu, S.T., M.Kom</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 6149762663138023</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page 4 -->
+          <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dosen 13 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Eri.jpg" alt="Prof. Dr. Eriyatno" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Prof. Dr. Eriyatno, M.Sc</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 4638725626130012</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Guru Besar</div>
+              </div>
+            </div>
+            <!-- Dosen 14 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Berlin.jpg" alt="Nurul Kamilah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Nurul Kamilah, S.Kom., M.Kom.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2459764665230223</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 15 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Iksal.jpg" alt="Iksal Yanuarsyah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Iksal Yanuarsyah, S. Hut., M. Sc. IT.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2460758659130122</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 16 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_gibtha.jpg" alt="Gibtha Fitri Laxmi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Gibtha Fitri Laxmi, S. Kom., M.Kom.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 3044763664230313</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page 5 -->
+          <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Dosen 17 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Freza.jpg" alt="Freza Riana" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Freza Riana, S.Si., M.Si.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 9260765666230243</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 18 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Bu_Dewi.jpg" alt="Dewi Primasari" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Dewi Primasari, S. Si., MM.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 2260752653237023</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 19 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Bayu.jpg" alt="Bayu Adhi Prakosa" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Bayu Adhi Prakosa, S. Kom., MT.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 7253758659130123</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+            <!-- Dosen 20 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
+              <img src="assets/img/dosen/Pak_Andik.jpg" alt="Andik Eko Kristus P" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
+                <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Andik Eko Kristus P, S. Si., MT.</h4>
+                <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 3438740641130083</div>
+                <div class="text-[8px] sm:text-[10px] font-semibold text-white bg-white/20 px-1.5 sm:px-2 py-0.5 rounded-full inline-block">Dosen</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Pagination Dots -->
+      <div class="flex justify-center gap-2 mt-8">
+        <div class="w-2.5 h-2.5 rounded-full bg-teal transition-colors duration-300" id="dot-0"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-navy/20 transition-colors duration-300" id="dot-1"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-navy/20 transition-colors duration-300" id="dot-2"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-navy/20 transition-colors duration-300" id="dot-3"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-navy/20 transition-colors duration-300" id="dot-4"></div>
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ PRESTASI ============ -->
+  <section id="prestasi" class="relative py-24 bg-white">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6" data-aos="fade-up">
+        <div class="text-left max-w-2xl">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Capaian</p>
+          <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Prestasi & Penghargaan</h2>
+          <div class="w-16 h-0.5 bg-teal-light mt-5 mb-4"></div>
+          <p class="text-navy/60 text-sm">Bukti nyata kontribusi mahasiswa dan dosen di kancah kompetisi.</p>
+        </div>
+        
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="prestasi-prev" class="w-12 h-12 rounded-full bg-soft text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Sebelumnya">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button id="prestasi-next" class="w-12 h-12 rounded-full bg-soft text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Selanjutnya">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Prestasi 2 Banjar di Mobile (grid-cols-2) -->
+      <div id="prestasi-scroll" class="grid grid-cols-2 lg:flex lg:flex-row gap-3 sm:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 hide-scrollbar">
+        
+        <div class="snap-start shrink-0 w-full lg:w-[calc(25%-18px)] bg-soft rounded-3xl p-2 sm:p-2.5 flex flex-col gap-4 items-center hover:shadow-lg transition duration-300 border border-navy/5">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-navy/5 shrink-0">
+            <img src="assets/img/bang.png" alt="Juara 1" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
+          </div>
+          <div class="p-2 sm:p-4 pt-0 flex-1 flex flex-col justify-between text-center">
+            <div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1 sm:mb-2 block">Best Mahasiswa</span>
+              <h3 class="font-semibold text-xs sm:text-lg text-navy mb-1 sm:mb-2 leading-tight">Distinction Graduate Bangkit Academy</h3>
+              <p class="text-[10px] sm:text-xs text-navy/60 leading-relaxed hidden sm:block">Penerima funding 140 juta best capstone project bangkit academy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="snap-start shrink-0 w-full lg:w-[calc(25%-18px)] bg-soft rounded-3xl p-2 sm:p-2.5 flex flex-col gap-4 items-center hover:shadow-lg transition duration-300 border border-navy/5">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-navy/5 shrink-0">
+            <img src="assets/img/keren.png" alt="Juara" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
+          </div>
+          <div class="p-2 sm:p-4 pt-0 flex-1 flex flex-col justify-between text-center">
+            <div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1 sm:mb-2 block">Kompetisi Web</span>
+              <h3 class="font-semibold text-xs sm:text-lg text-navy mb-1 sm:mb-2 leading-tight">Juara 2 Kategori Mahasiswa</h3>
+              <p class="text-[10px] sm:text-xs text-navy/60 leading-relaxed hidden sm:block">LOMBA WEB GEBYAR IT.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="snap-start shrink-0 w-full lg:w-[calc(25%-18px)] bg-soft rounded-3xl p-2 sm:p-2.5 flex flex-col gap-4 items-center hover:shadow-lg transition duration-300 border border-navy/5">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-navy/5 shrink-0">
+            <img src="assets/img/juara.png" alt="Keren" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
+          </div>
+          <div class="p-2 sm:p-4 pt-0 flex-1 flex flex-col justify-between text-center">
+            <div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1 sm:mb-2 block">Tim Innosoft</span>
+              <h3 class="font-semibold text-xs sm:text-lg text-navy mb-1 sm:mb-2 leading-tight">Lomba Inovasi</h3>
+              <p class="text-[10px] sm:text-xs text-navy/60 leading-relaxed hidden sm:block">Juara I, II, III Lomba Inovasi Tingkat Kabupaten Bogor Tahun 2020.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="snap-start shrink-0 w-full lg:w-[calc(25%-18px)] bg-soft rounded-3xl p-2 sm:p-2.5 flex flex-col gap-4 items-center hover:shadow-lg transition duration-300 border border-navy/5">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-navy/5 shrink-0">
+            <img src="assets/img/caps.png" alt="Caps" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
+          </div>
+          <div class="p-2 sm:p-4 pt-0 flex-1 flex flex-col justify-between text-center">
+            <div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1 sm:mb-2 block">Tim Innosoft</span>
+              <h3 class="font-semibold text-xs sm:text-lg text-navy mb-1 sm:mb-2 leading-tight">10 Besar Finalis Nasional</h3>
+              <p class="text-[10px] sm:text-xs text-navy/60 leading-relaxed hidden sm:block">Lomba EDSEN Hackathon Tahun 2022.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section id="gallery" class="relative py-24 bg-soft">
+    <div class="wave-divider top-0 -translate-y-[1px] rotate-180">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/>
+      </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-semibold">Dokumentasi</p>
+        <h2 class="font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Galeri Kegiatan</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Momen perkuliahan, praktikum, dan aktivitas mahasiswa.</p>
+      </div>
+
+      <div class="gallery-grid" data-aos="fade-up">
+        <div class="gallery-item gal-large relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/juara.png')">
+          <img src="assets/img/juara.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300 flex items-center justify-center">
+            <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path></svg>
+          </div>
+        </div>
+        <div class="gallery-item gal-tall relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/bang.png')">
+          <img src="assets/img/bang.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+        <div class="gallery-item gal-square relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/drone.webp')">
+          <img src="assets/img/drone.webp" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+        <div class="gallery-item gal-square relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/caps.png')">
+          <img src="assets/img/caps.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+        <div class="gallery-item gal-wide relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/keren.png')">
+          <img src="assets/img/keren.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+        <div class="gallery-item gal-square relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/git.png')">
+          <img src="assets/img/git.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+        <div class="gallery-item gal-square relative rounded-2xl overflow-hidden cursor-pointer group" onclick="openLightbox('assets/img/gebyar.png')">
+          <img src="assets/img/gebyar.png" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition duration-300"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#101C2C"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ CTA SECTION ============ -->
+  <section id="cta" class="relative py-24 bg-navy overflow-hidden">
+    <div class="absolute inset-0 pattern-dots opacity-30"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-teal rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gold rounded-full filter blur-3xl opacity-10 translate-y-1/2 -translate-x-1/2"></div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-20 text-center" data-aos="zoom-in" data-aos-duration="800">
+      <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-4 font-semibold">Ayo Bergabung</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
+        Siap Menjadi <span class="text-teal-light">Talenta Digital</span> Masa Depan?
+      </h2>
+      <p class="text-white/70 text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed">
+        Bergabunglah bersama ribuan mahasiswa lainnya dan raih masa depan gemilang di Program Studi Teknik Informatika Universitas Ibn Khaldun Bogor.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://siakad.uika-bogor.ac.id/spmbfront/jalur-seleksi" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gold text-navy font-semibold text-sm hover:-translate-y-1 hover:shadow-2xl transition-all shadow-lg">
+          Daftar Sekarang
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#footer" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white font-medium text-sm hover:bg-white/20 transition">
+          Hubungi Kami
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="footer" class="bg-navy text-soft relative pt-16 pb-8">
+    <div class="container mx-auto px-6 max-w-6xl relative z-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-12">
+        
+        <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="0">
+          <div class="flex items-center gap-4 mb-6">
+            <img src="assets/img/logo/uika.png" alt="Logo UIKA" class="w-14 h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+            <img src="assets/img/logo/prodi.png" alt="Logo TI" class="w-14 h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+            <img src="assets/img/logo/hima.png" alt="Logo HIMA" class="w-14 h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+          </div>
+          
+          <div class="mb-6">
+            <div class="font-bold text-lg text-white">Teknik Informatika</div>
+            <div class="text-[10px] text-soft/60 uppercase tracking-wider mb-3">Universitas Ibn Khaldun Bogor</div>
+            <p class="text-sm text-soft/60 leading-relaxed">
+              Mencetak talenta digital yang unggul, inovatif, dan berintegritas untuk masa depan teknologi.
+            </p>
+          </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <a href="https://www.instagram.com/uika_bogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="Facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="YouTube">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="TikTok">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/school/universitas-ibn-khaldun-bogor/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://wa.me/62816731857" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="WhatsApp">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="lg:col-span-2" data-aos="fade-up" data-aos-delay="100">
+          <h4 class="font-bold text-sm mb-5 uppercase tracking-wider text-white">Navigasi</h4>
+          <ul class="space-y-3 text-sm text-soft/60">
+            <li><a href="#hero" class="hover:text-teal-light transition">Beranda</a></li>
+            <li><a href="#about" class="hover:text-teal-light transition">Tentang TI</a></li>
+            <li><a href="#dosen" class="hover:text-teal-light transition">Dosen</a></li>
+            <li><a href="#footer" class="hover:text-teal-light transition">Kontak</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-2" data-aos="fade-up" data-aos-delay="200">
+          <h4 class="font-bold text-sm mb-5 uppercase tracking-wider text-white">Peminatan</h4>
+          <ul class="space-y-3 text-sm text-soft/60">
+            <li><a href="lab-se.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab SE</a></li>
+            <li><a href="lab-csn.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab CSN</a></li>
+            <li><a href="lab-git.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab GIT</a></li>
+            <li><a href="lab-keris.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab KERIS</a></li>
+          </ul>
+        </div>
+        
+        <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="300">
+          <h4 class="font-bold text-sm mb-5 uppercase tracking-wider text-white">Lokasi & Kontak</h4>
+          
+          <a href="https://www.google.com/maps/search/?api=1&query=Universitas+Ibn+Khaldun+Bogor" target="_blank" rel="noopener noreferrer" class="block relative group rounded-xl overflow-hidden mb-4 border border-white/10 hover:border-teal-light transition shadow-lg">
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Peta UIKA Bogor" class="w-full h-36 object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" />
+            <div class="absolute inset-0 bg-navy/40 flex items-center justify-center">
+              <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-navy font-bold text-xs shadow-lg transform translate-y-2 group-hover:translate-y-0 transition">
+                <svg class="w-4 h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Buka Google Maps
+              </span>
+            </div>
+          </a>
+
+          <ul class="space-y-3 text-sm text-soft/60">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-teal-light shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Jl. K.H. Sholeh Iskandar Km. 2,<br>Kedung Badak, Bogor 16162</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-teal-light shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <a href="mailto:ti@uika-bogor.ac.id" class="hover:text-teal-light transition">ti@uika-bogor.ac.id</a>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+      
+      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-soft/40 gap-4">
+        <div>© 2026 Teknik Informatika — Universitas Ibn Khaldun Bogor. All rights reserved.</div>
+        <div class="flex gap-4">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ FLOATING BUTTONS ============ -->
+  <!-- Back to Top -->
+  <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 left-6 z-[140] w-12 h-12 rounded-full bg-teal text-white shadow-xl flex items-center justify-center border-2 border-white hover:scale-110 transition" aria-label="Kembali ke atas">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+  </button>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/62816731857" target="_blank" rel="noopener noreferrer" class="fixed bottom-24 left-6 z-[140] w-12 h-12 rounded-full bg-green-500 text-white shadow-xl flex items-center justify-center border-2 border-white hover:scale-110 transition hover:bg-green-600" aria-label="WhatsApp">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- ============ AKSESIBILITAS ============ -->
+  <div class="fixed bottom-6 right-6 z-[150] flex flex-col items-end">
+    <div id="accessibility-menu" class="mb-4 bg-white p-2 rounded-2xl shadow-xl border border-gray-100 flex flex-col gap-1 w-48 transition-all opacity-0 invisible translate-y-2">
+      <p class="text-[10px] font-bold text-navy/50 uppercase tracking-wider px-2 pt-1 pb-2 border-b border-gray-100 mb-1">Ukuran Teks</p>
+      <button onclick="changeFontSize('increase')" class="flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-soft rounded-xl transition text-left">
+        <span class="text-lg font-bold">A+</span> Perbesar Teks
+      </button>
+      <button onclick="changeFontSize('decrease')" class="flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-soft rounded-xl transition text-left">
+        <span class="text-xs font-bold">A-</span> Perkecil Teks
+      </button>
+      <button onclick="changeFontSize('reset')" class="flex items-center gap-2 px-3 py-2 text-sm text-navy hover:bg-soft rounded-xl transition text-left border-t border-gray-100 mt-1">
+        <svg class="w-4 h-4 text-navy/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Reset
+      </button>
+    </div>
+    <button id="accessibility-btn" onclick="toggleAccessibility()" class="w-14 h-14 rounded-full bg-teal text-white shadow-xl flex items-center justify-center border-2 border-white hover:scale-110 transition" aria-label="Menu Aksesibilitas">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ============ MODAL VIDEO ============ -->
+  <div id="videoModal" class="modal-overlay fixed inset-0 z-[250] flex items-center justify-center p-4 bg-navy/90 backdrop-blur-sm">
+    <button onclick="closeVideoModal()" class="absolute top-6 right-6 md:top-10 md:right-10 w-12 h-12 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-full flex items-center justify-center transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <div class="modal-content w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl relative">
+      <div class="aspect-video">
+        <iframe id="ytIframe" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL STRUKTUR ============ -->
+  <div id="strukturModal" class="modal-overlay fixed inset-0 z-[250] flex items-center justify-center p-3 sm:p-4 bg-navy/90 backdrop-blur-sm">
+    <button onclick="closeStrukturModal()" class="absolute top-4 right-4 md:top-6 md:right-6 z-50 w-11 h-11 bg-black/40 hover:bg-black/60 border border-white/30 text-white rounded-full flex items-center justify-center transition shadow-lg">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <div class="modal-content w-full max-w-sm sm:max-w-md bg-white rounded-2xl shadow-2xl relative flex flex-col overflow-hidden">
+      <div class="px-3 pt-3 pb-2 border-b border-gray-100 bg-white">
+        <h3 class="font-semibold text-sm text-navy mb-2 text-center">Struktur Organisasi Lab</h3>
+        <div class="flex gap-1 overflow-x-auto hide-scrollbar justify-center pb-1">
+          <button data-struktur-tab="se" class="struktur-tab shrink-0 px-3 py-1.5 rounded-full text-[10px] font-semibold transition bg-teal text-white">SE</button>
+          <button data-struktur-tab="csn" class="struktur-tab shrink-0 px-3 py-1.5 rounded-full text-[10px] font-semibold transition bg-navy/5 text-navy/70 hover:bg-navy/10">CSN</button>
+          <button data-struktur-tab="git" class="struktur-tab shrink-0 px-3 py-1.5 rounded-full text-[10px] font-semibold transition bg-navy/5 text-navy/70 hover:bg-navy/10">GIT</button>
+          <button data-struktur-tab="keris" class="struktur-tab shrink-0 px-3 py-1.5 rounded-full text-[10px] font-semibold transition bg-navy/5 text-navy/70 hover:bg-navy/10">KERIS</button>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-auto p-3 bg-soft/40 flex items-center justify-center">
+        <img id="strukturImg" 
+             src="assets/img/organisasi/lab-se.jfif" 
+             alt="Struktur Organisasi Lab" 
+             class="w-auto h-auto max-w-full max-h-[65vh] object-contain rounded-lg shadow-md bg-white" 
+             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';" />
+      </div>
+
+      <div class="px-3 py-2.5 border-t border-gray-100 bg-white">
+        <p id="strukturCaption" class="text-center text-[10px] text-navy/50 italic mb-2">Struktur Organisasi Lab Software Engineering</p>
+        <div class="flex items-center justify-center gap-3">
+          <button id="strukturPrev" class="w-9 h-9 rounded-full bg-soft text-navy border border-navy/10 flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Sebelumnya">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="text-[11px] font-medium text-navy/60" id="strukturCounter">1 / 4</span>
+          <button id="strukturNext" class="w-9 h-9 rounded-full bg-soft text-navy border border-navy/10 flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Selanjutnya">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div id="lightbox" class="fixed inset-0 z-[200] bg-navy/95 backdrop-blur-md flex items-center justify-center p-6 cursor-pointer" onclick="closeLightbox()">
+    <button class="absolute top-6 right-6 text-white hover:text-teal-light transition">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Zoomed Gallery" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain" />
+  </div>
+
+  <!-- ============ SCRIPT (CLEAN JS) ============ -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // ==== Init AOS ====
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 80,
+      easing: 'ease-out-cubic',
+    });
+
+    // ==== Scroll Progress + Back to Top ====
+    const scrollProgress = document.getElementById('scrollProgress');
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+
+      if (scrollTop > 500) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
+    });
+
+    // ==== Mobile Menu ====
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileDropBtn = document.getElementById('mobileDropBtn');
+    const mobileDropdown = document.getElementById('mobileDropdown');
+    const mobileArrow = document.getElementById('mobileArrow');
+
+    burger.addEventListener('click', () => {
+      const open = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!open));
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    mobileDropBtn.addEventListener('click', () => {
+      const isHidden = mobileDropdown.classList.contains('hidden');
+      if (isHidden) {
+        mobileDropdown.classList.remove('hidden');
+        mobileDropdown.classList.add('show');
+        mobileArrow.style.transform = 'rotate(180deg)';
+      } else {
+        mobileDropdown.classList.add('hidden');
+        mobileDropdown.classList.remove('show');
+        mobileArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    // ==== Fitur Pencarian ====
+    const searchData = [
+      { title: "Beranda", desc: "Selamat datang di Prodi Teknik Informatika UIKA", url: "#hero" },
+      { title: "Peminatan SE", desc: "Software Engineering - Rekayasa Perangkat Lunak", url: "lab-se.html" },
+      { title: "Peminatan CSN", desc: "Computer System & Network - Jaringan & Keamanan Siber", url: "lab-csn.html" },
+      { title: "Peminatan GIT", desc: "Geospatial Info Tech - Teknologi Informasi Spasial", url: "lab-git.html" },
+      { title: "Peminatan KERIS", desc: "Knowledge Engineering - Kecerdasan Buatan & AI", url: "lab-keris.html" },
+      { title: "Kenapa Pilih TI", desc: "6 alasan memilih Teknik Informatika UIKA", url: "#kenapa" },
+      { title: "Tentang Kami", desc: "Membangun Talenta Digital Masa Depan, Visi & Misi Fakultas", url: "#about" },
+      { title: "Visi Misi", desc: "Menjadi Fakultas yang Islami dan Unggul dalam Riset", url: "#visimisi" },
+      { title: "Laboratorium", desc: "Lab Rekayasa Perangkat Lunak, Jaringan, AI, Geospasial", url: "#lab" },
+      { title: "Prospek Karier", desc: "Peluang kerja lulusan TI (Software Engineer, Data Scientist, dll)", url: "#karier" },
+      { title: "Dosen & Pengajar", desc: "Daftar dosen dan tenaga pengajar prodi Teknik Informatika", url: "#dosen" },
+      { title: "Prestasi", desc: "Prestasi akademik dan non-akademik mahasiswa TI", url: "#prestasi" },
+      { title: "Galeri Kegiatan", desc: "Dokumentasi perkuliahan, praktikum, dan aktivitas mahasiswa", url: "#gallery" },
+      { title: "Daftar Sekarang", desc: "Ayo bergabung bersama TI UIKA", url: "#cta" },
+      { title: "Kontak & Lokasi", desc: "Alamat UIKA Bogor, Email, dan Google Maps", url: "#footer" }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const searchInputMobile = document.getElementById('searchInputMobile');
+    const searchResults = document.getElementById('searchResults');
+    const searchResultsList = document.getElementById('searchResultsList');
+    const searchResultsMobile = document.getElementById('searchResultsMobile');
+
+    function performSearch(query, isMobile = false) {
+      const resultContainer = isMobile ? searchResultsMobile : searchResultsList;
+      const dropdownContainer = isMobile ? searchResultsMobile : searchResults;
+
+      if (!query) {
+        dropdownContainer.classList.add('hidden');
+        return;
+      }
+
+      dropdownContainer.classList.remove('hidden');
+      resultContainer.innerHTML = '';
+
+      const filtered = searchData.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) || 
+        item.desc.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        resultContainer.innerHTML = `<div class="p-3 text-sm text-center text-navy/50">Tidak ada hasil untuk "${query}"</div>`;
+      } else {
+        filtered.forEach(item => {
+          const a = document.createElement('a');
+          const targetAttr = item.url.startsWith('#') ? '' : 'target="_blank"';
+          a.href = item.url;
+          a.setAttribute('target', targetAttr);
+          a.className = "block p-3 rounded-xl hover:bg-soft transition text-left";
+          a.innerHTML = `
+            <div class="text-sm font-semibold text-navy">${item.title}</div>
+            <div class="text-[11px] text-navy/60 mt-0.5">${item.desc}</div>
+          `;
+          
+          a.addEventListener('click', () => {
+            dropdownContainer.classList.add('hidden');
+            if (isMobile) {
+              mobileMenu.classList.add('hidden');
+            }
+          });
+
+          resultContainer.appendChild(a);
+        });
+      }
+    }
+
+    searchInput.addEventListener('input', (e) => performSearch(e.target.value, false));
+    searchInputMobile.addEventListener('input', (e) => performSearch(e.target.value, true));
+
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.classList.add('hidden');
+      }
+      if (!searchInputMobile.contains(e.target) && !searchResultsMobile.contains(e.target)) {
+        searchResultsMobile.classList.add('hidden');
+      }
+    });
+
+    // ==== Counter Animation ====
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let hasCounted = false;
+
+    function animateCounters() {
+      statNumbers.forEach(el => {
+        const target = parseInt(el.dataset.count);
+        const suffix = el.dataset.suffix || '';
+        const duration = 2000;
+        const start = performance.now();
+        
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(eased * target);
+          el.textContent = current.toLocaleString('id-ID') + suffix;
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    const heroObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasCounted) {
+          hasCounted = true;
+          animateCounters();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const heroStats = document.querySelector('.stat-number');
+    if (heroStats) heroObserver.observe(heroStats.parentElement.parentElement);
+
+    // ==== Slider Dosen ====
+    const track = document.getElementById('slider-track');
+    const prevBtn = document.getElementById('btn-prev');
+    const nextBtn = document.getElementById('btn-next');
+    const pages = track.children;
+    let currentPage = 0;
+    const dots = [
+      document.getElementById('dot-0'), document.getElementById('dot-1'), 
+      document.getElementById('dot-2'), document.getElementById('dot-3'), 
+      document.getElementById('dot-4')
+    ];
+
+    function updateSlider() {
+      track.style.transform = `translateX(-${currentPage * 100}%)`;
+      prevBtn.disabled = currentPage === 0;
+      nextBtn.disabled = currentPage === pages.length - 1;
+      
+      dots.forEach((dot, index) => {
+        dot.className = index === currentPage 
+          ? "w-2.5 h-2.5 rounded-full bg-teal transition-colors duration-300" 
+          : "w-2.5 h-2.5 rounded-full bg-navy/20 transition-colors duration-300";
+      });
+    }
+
+    nextBtn.addEventListener('click', () => { if (currentPage < pages.length - 1) { currentPage++; updateSlider(); } });
+    prevBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; updateSlider(); } });
+
+    // ==== Prestasi Slider ====
+    const prestasiScroll = document.getElementById('prestasi-scroll');
+    const prestasiPrevBtn = document.getElementById('prestasi-prev');
+    const prestasiNextBtn = document.getElementById('prestasi-next');
+
+    function getScrollAmount() {
+      const firstCard = prestasiScroll.querySelector('div');
+      if (!firstCard) return 300;
+      return firstCard.offsetWidth + 24;
+    }
+
+    prestasiNextBtn.addEventListener('click', () => {
+      prestasiScroll.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prestasiPrevBtn.addEventListener('click', () => {
+      prestasiScroll.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prestasiScroll.addEventListener('scroll', () => {
+      if (prestasiScroll.scrollLeft <= 0) {
+        prestasiPrevBtn.classList.add('opacity-30', 'pointer-events-none');
+      } else {
+        prestasiPrevBtn.classList.remove('opacity-30', 'pointer-events-none');
+      }
+      
+      if (prestasiScroll.scrollLeft + prestasiScroll.clientWidth >= prestasiScroll.scrollWidth - 5) {
+        prestasiNextBtn.classList.add('opacity-30', 'pointer-events-none');
+      } else {
+        prestasiNextBtn.classList.remove('opacity-30', 'pointer-events-none');
+      }
+    });
+    prestasiScroll.dispatchEvent(new Event('scroll'));
+
+    // ==== Modal Video ====
+    const videoModal = document.getElementById('videoModal');
+    const ytIframe = document.getElementById('ytIframe');
+
+    function openVideoModal() {
+      ytIframe.src = "https://www.youtube.com/embed/9CzEftVJJTQ?autoplay=1";
+      videoModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeVideoModal() {
+      ytIframe.src = ""; 
+      videoModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // ==== Modal Struktur ====
+    const strukturModal = document.getElementById('strukturModal');
+    const strukturImg = document.getElementById('strukturImg');
+    const strukturCaption = document.getElementById('strukturCaption');
+    const strukturCounter = document.getElementById('strukturCounter');
+    const strukturPrev = document.getElementById('strukturPrev');
+    const strukturNext = document.getElementById('strukturNext');
+    const strukturTabs = document.querySelectorAll('.struktur-tab');
+
+    const strukturData = [
+      { key: 'se',    file: 'assets/img/organisasi/lab-se.jfif',    caption: 'Struktur Organisasi Lab Software Engineering' },
+      { key: 'csn',   file: 'assets/img/organisasi/lab-csn.jfif',   caption: 'Struktur Organisasi Lab Computer System & Network' },
+      { key: 'git',   file: 'assets/img/organisasi/lab-git.jfif',   caption: 'Struktur Organisasi Lab Geospatial Information Technology' },
+      { key: 'keris', file: 'assets/img/organisasi/lab-keris.jfif', caption: 'Struktur Organisasi Lab Knowledge Engineering' },
+    ];
+    let strukturIndex = 0;
+
+    function renderStruktur() {
+      const data = strukturData[strukturIndex];
+      strukturImg.src = data.file;
+      strukturCaption.textContent = data.caption;
+      strukturCounter.textContent = `${strukturIndex + 1} / ${strukturData.length}`;
+
+      strukturTabs.forEach(btn => {
+        const active = btn.dataset.strukturTab === data.key;
+        btn.classList.toggle('bg-teal', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-navy/5', !active);
+        btn.classList.toggle('text-navy/70', !active);
+        btn.classList.toggle('hover:bg-navy/10', !active);
+      });
+
+      strukturPrev.disabled = strukturIndex === 0;
+      strukturNext.disabled = strukturIndex === strukturData.length - 1;
+    }
+
+    function openStrukturModal() {
+      strukturIndex = 0;
+      renderStruktur();
+      strukturModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeStrukturModal() {
+      strukturModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    strukturTabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = strukturData.findIndex(d => d.key === btn.dataset.strukturTab);
+        if (idx !== -1) { strukturIndex = idx; renderStruktur(); }
+      });
+    });
+
+    strukturPrev.addEventListener('click', () => {
+      if (strukturIndex > 0) { strukturIndex--; renderStruktur(); }
+    });
+    strukturNext.addEventListener('click', () => {
+      if (strukturIndex < strukturData.length - 1) { strukturIndex++; renderStruktur(); }
+    });
+
+    // ==== Lightbox ====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+    }
+
+    // ==== Aksesibilitas ====
+    const accBtn = document.getElementById('accessibility-btn');
+    const accMenu = document.getElementById('accessibility-menu');
+    let currentFontSize = 100;
+
+    function toggleAccessibility() {
+      accMenu.classList.toggle('opacity-0');
+      accMenu.classList.toggle('invisible');
+      accMenu.classList.toggle('translate-y-2');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!accBtn.contains(e.target) && !accMenu.contains(e.target)) {
+        accMenu.classList.add('opacity-0', 'invisible', 'translate-y-2');
+      }
+    });
+
+    function changeFontSize(action) {
+      const htmlElement = document.documentElement;
+      if (action === 'increase' && currentFontSize < 130) { currentFontSize += 10; }
+      else if (action === 'decrease' && currentFontSize > 80) { currentFontSize -= 10; }
+      else if (action === 'reset') { currentFontSize = 100; }
+      htmlElement.style.fontSize = `${currentFontSize}%`;
+    }
+  </script>
+</body>
+</html>

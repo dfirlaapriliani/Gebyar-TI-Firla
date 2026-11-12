@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geospatial Information Technology — Teknik Informatika UIKA</title>
+  <meta name="description" content="Peminatan Geospatial Information Technology (GIT) — Teknik Informatika Universitas Ibn Khaldun Bogor." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            navy: '#101C2C',
+            teal: '#183B50',
+            'teal-light': '#4B9B9A',
+            soft: '#EAF1F3',
+            white: '#FFFFFF',
+            gold: '#C9A961',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'float-slow': 'float 8s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'gradient-shift': 'gradientShift 8s ease infinite',
+          },
+          keyframes: {
+            float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
+            gradientShift: { '0%, 100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html, body { max-width: 100%; overflow-x: hidden !important; }
+    .hero-git {
+      background-image: linear-gradient(to bottom, rgba(16, 28, 44, 0.7), rgba(24, 59, 80, 0.8)), url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover; background-position: center; background-attachment: fixed;
+    }
+    .wave-divider { position: absolute; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 10; pointer-events: none; }
+    .wave-divider svg { display: block; width: calc(100% + 1.3px); height: 60px; }
+    @media (min-width: 768px) { .wave-divider svg { height: 100px; } }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .animate-marquee { animation: marquee 20s linear infinite; display: inline-block; white-space: nowrap; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #4B9B9A, #C9A961); z-index: 999; width: 0%; transition: width 0.1s ease; box-shadow: 0 0 10px rgba(75, 155, 154, 0.5); }
+    .gradient-text { background: linear-gradient(135deg, #ffffff 0%, #4B9B9A 50%, #C9A961 100%); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradientShift 6s ease infinite; }
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; }
+    .glass-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    @keyframes scrollBounce { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(10px); opacity: 0.5; } }
+    .scroll-indicator { animation: scrollBounce 2s ease-in-out infinite; }
+    .hover-glow { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-glow:hover { box-shadow: 0 20px 60px -15px rgba(75, 155, 154, 0.4); transform: translateY(-6px); }
+    #backToTop { opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; }
+    #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    /* ===== MODAL PPT ===== */
+    .ppt-modal {
+      opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    }
+    .ppt-modal.active {
+      opacity: 1; visibility: visible;
+    }
+    .ppt-modal-content {
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ppt-modal.active .ppt-modal-content {
+      transform: scale(1) translateY(0);
+    }
+    .ppt-spinner {
+      border: 3px solid rgba(75, 155, 154, 0.2);
+      border-top-color: #4B9B9A;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== RESPONSIVE MODAL FIX ===== */
+    @media (max-width: 640px) {
+      .ppt-modal-content {
+        height: 92vh !important;
+        max-height: 92vh !important;
+        border-radius: 1rem !important;
+      }
+      .ppt-modal-header-title {
+        font-size: 11px !important;
+      }
+      .ppt-modal-header-sub {
+        font-size: 9px !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-soft text-navy antialiased overflow-x-hidden">
+
+  <div id="scrollProgress"></div>
+
+  <!-- NAVBAR -->
+  <header class="fixed top-3 sm:top-5 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] max-w-6xl px-2 sm:px-4">
+    <nav class="flex items-center justify-between gap-2 sm:gap-4 px-2 sm:px-3 py-2 sm:py-2.5 rounded-full bg-white/90 backdrop-blur-xl border border-white/70 shadow-lg relative">
+      <a href="index.html" class="flex items-center gap-2 sm:gap-3 pl-1 sm:pl-2 shrink-0 group">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-teal/10 flex items-center justify-center group-hover:bg-teal transition">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        </div>
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="font-display font-semibold text-sm text-navy">Kembali ke Beranda</span>
+          <span class="text-[9px] text-navy/60 tracking-wider uppercase">Teknik Informatika</span>
+        </span>
+      </a>
+
+      <ul class="hidden lg:flex items-center gap-1">
+        <li><a href="#tentang" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Tentang</a></li>
+        <li><a href="#kurikulum" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Kurikulum</a></li>
+        <li><a href="#struktur" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Dosen</a></li>
+        <li><a href="#karier" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">Karier</a></li>
+        <li><a href="#dokumentasi" class="px-3 py-2 text-[13px] font-medium text-navy/70 hover:text-teal transition">RISE GIT</a></li>
+      </ul>
+
+      <div class="flex items-center gap-1.5 sm:gap-2 relative">
+        <a href="#cta" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-navy text-white text-[13px] font-medium hover:bg-teal transition shadow-sm">Daftar</a>
+        <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-navy/5 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition" aria-label="Buka Menu">
+          <svg id="icon-hamburger" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div id="mobile-menu" class="lg:hidden hidden absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-3xl border border-white/70 shadow-xl p-3 sm:p-4">
+        <ul class="flex flex-col gap-1">
+          <li><a href="#tentang" class="block px-4 py-3 rounded-xl text-sm font-medium text-navy/70 hover:bg-soft hover:text-teal transition">Tentang</a></li>
+          <li><a href="#kurikulum" class="block px-4 py-3 rounded-xl text-sm font-medium text-navy/70 hover:bg-soft hover:text-teal transition">Kurikulum</a></li>
+          <li><a href="#struktur" class="block px-4 py-3 rounded-xl text-sm font-medium text-navy/70 hover:bg-soft hover:text-teal transition">Dosen</a></li>
+          <li><a href="#karier" class="block px-4 py-3 rounded-xl text-sm font-medium text-navy/70 hover:bg-soft hover:text-teal transition">Karier</a></li>
+          <li><a href="#dokumentasi" class="block px-4 py-3 rounded-xl text-sm font-medium text-navy/70 hover:bg-soft hover:text-teal transition">RISE GIT</a></li>
+          <li class="pt-2 mt-2 border-t border-navy/10"><a href="#cta" class="block px-4 py-3 rounded-xl bg-navy text-white text-sm font-medium text-center hover:bg-teal transition">Daftar Sekarang</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden hero-git">
+    <div class="hero-orb w-96 h-96 bg-teal-light -top-20 -left-20 animate-float-slow"></div>
+    <div class="hero-orb w-80 h-80 bg-gold/40 top-1/3 -right-20 animate-float"></div>
+
+    <div class="relative z-20 container mx-auto px-4 sm:px-6 text-center flex flex-col items-center pt-24 pb-16">
+      <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm mb-6">
+        <span class="w-2 h-2 rounded-full bg-teal-light animate-pulse"></span>
+        <span class="text-[10px] sm:text-xs font-semibold text-white tracking-wide">Peminatan Unggulan • RISE GIT</span>
+      </div>
+
+      <h1 data-aos="fade-up" data-aos-duration="900" class="font-display font-bold text-white text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[1.1] tracking-tight mb-6 drop-shadow-lg">
+        Geospatial Information<br /><span class="gradient-text">Technology</span>
+      </h1>
+
+      <p data-aos="fade-up" data-aos-duration="900" data-aos-delay="150" class="text-sm sm:text-lg text-white/90 font-light max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-md">
+        Mengungkap rahasia bumi melalui data spasial. Merancang peta digital, menganalisis tata ruang, dan membangun sistem informasi geografis yang inovatif.
+      </p>
+
+      <div data-aos="fade-up" data-aos-duration="900" data-aos-delay="300" class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14 w-full sm:w-auto">
+        <a href="#tentang" class="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 rounded-full bg-teal-light text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-xl transition-all shadow-md w-full sm:w-auto">
+          Pelajari Lebih Lanjut
+          <svg class="w-4 h-4 group-hover:translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <a href="#dokumentasi" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 rounded-full bg-white/10 backdrop-blur border border-white/30 text-white font-medium text-sm hover:bg-white/20 transition w-full sm:w-auto">Lihat Profil Lab</a>
+      </div>
+
+      <div class="scroll-indicator mt-10 text-white/50">
+        <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+      </div>
+    </div>
+
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/></svg>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="bg-teal-light text-white py-3 overflow-hidden font-bold text-xs sm:text-sm tracking-widest uppercase">
+    <div class="animate-marquee">
+      <span class="mx-3 sm:mx-4">Geographic Information Systems</span> • <span class="mx-3 sm:mx-4">Remote Sensing</span> • <span class="mx-3 sm:mx-4">Cartography</span> • <span class="mx-3 sm:mx-4">Spatial Analysis</span> • <span class="mx-3 sm:mx-4">Web Mapping</span> • <span class="mx-3 sm:mx-4">Drone Mapping</span> • <span class="mx-3 sm:mx-4">Geographic Information Systems</span> • <span class="mx-3 sm:mx-4">Remote Sensing</span> • <span class="mx-3 sm:mx-4">Cartography</span> • <span class="mx-3 sm:mx-4">Spatial Analysis</span> • <span class="mx-3 sm:mx-4">Web Mapping</span> • <span class="mx-3 sm:mx-4">Drone Mapping</span>
+    </div>
+  </div>
+
+  <!-- TENTANG -->
+  <section id="tentang" class="relative py-16 sm:py-24 bg-soft">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+        <div data-aos="fade-right" data-aos-duration="800" class="order-2 lg:order-1 relative">
+          <div class="absolute -inset-2 sm:-inset-4 bg-teal-light/20 rounded-[2rem] blur-xl transform -rotate-3"></div>
+          <img src="assets/img/lab/git.jpg" alt="Map" class="relative rounded-[1.5rem] sm:rounded-[2rem] shadow-xl w-full object-cover aspect-[4/3]" />
+          <div class="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 bg-white p-3 sm:p-5 rounded-2xl shadow-xl border border-gray-100 hidden md:block animate-float">
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-teal-light/20 flex items-center justify-center text-teal">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              </div>
+              <div><p class="font-bold text-navy text-base sm:text-lg">Spatial Data</p><p class="text-[10px] sm:text-xs text-navy/60">Geospatial Tech</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-aos="fade-left" data-aos-duration="800" class="order-1 lg:order-2">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-bold">Apa itu GIT?</p>
+          <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-navy mb-6 leading-tight tracking-tight">Memetakan Dunia dengan Data</h2>
+          <p class="text-navy/70 leading-relaxed mb-4 sm:mb-6 text-sm md:text-base"><strong>Geospatial Information Technology (GIT)</strong> adalah cabang ilmu yang menghubungkan teknologi informasi dengan letak geografis bumi. Di sini kamu akan belajar mengolah data dari satelit, drone, dan sensor untuk memahami pola ruang dan memecahkan masalah nyata.</p>
+          <p class="text-navy/70 leading-relaxed mb-6 sm:mb-8 text-sm md:text-base">Dari aplikasi navigasi seperti Google Maps, pemetaan potensi bencana alam, hingga perencanaan tata kota yang pintar (Smart City) — semuanya dibangun menggunakan ilmu dan teknologi spasial.</p>
+          <div class="grid grid-cols-2 gap-3 sm:gap-4">
+            <div class="border-l-4 border-teal-light pl-3 sm:pl-4"><h4 class="font-bold text-navy text-base sm:text-lg mb-1">GIS & Web Mapping</h4><p class="text-xs text-navy/60">Membangun sistem informasi pemetaan digital interaktif.</p></div>
+            <div class="border-l-4 border-teal-light pl-3 sm:pl-4"><h4 class="font-bold text-navy text-base sm:text-lg mb-1">Remote Sensing</h4><p class="text-xs text-navy/60">Analisis citra satelit dan pemetaan menggunakan drone.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/></svg>
+    </div>
+  </section>
+
+  <!-- KURIKULUM -->
+  <section id="kurikulum" class="relative py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-bold">Materi Utama</p>
+        <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Apa Saja yang Akan Dipelajari?</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div data-aos="fade-up" data-aos-delay="0" class="bg-soft p-6 sm:p-8 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-navy mb-4 sm:mb-6 group-hover:bg-teal group-hover:text-white transition duration-300">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          </div>
+          <h3 class="font-bold text-lg sm:text-xl text-navy mb-3 group-hover:text-teal transition">Sistem Informasi Geografis</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Menguasai software GIS (ArcGIS, QGIS), pengolahan data vektor/raster, serta pembuatan peta tematik yang informatif.</p>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100" class="bg-soft p-6 sm:p-8 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-navy mb-4 sm:mb-6 group-hover:bg-teal group-hover:text-white transition duration-300">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="font-bold text-lg sm:text-xl text-navy mb-3 group-hover:text-teal transition">Penginderaan Jauh</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Menganalisis data citra satelit (Landsat, Sentinel) dan hasil pemetaan udara (drone) untuk pemantauan lingkungan.</p>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="200" class="bg-soft p-6 sm:p-8 rounded-3xl border border-navy/5 hover-glow group">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-navy mb-4 sm:mb-6 group-hover:bg-teal group-hover:text-white transition duration-300">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+          <h3 class="font-bold text-lg sm:text-xl text-navy mb-3 group-hover:text-teal transition">Web Mapping & Spatial Analysis</h3>
+          <p class="text-sm text-navy/60 leading-relaxed">Membangun peta interaktif berbasis web (Leaflet, Mapbox) dan melakukan analisis spasial untuk pengambilan keputusan.</p>
+        </div>
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/></svg>
+    </div>
+  </section>
+
+      <!-- DOSEN -->
+  <section id="struktur" class="relative py-16 sm:py-24 bg-soft">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-20">
+      <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 sm:mb-12 gap-4 sm:gap-6" data-aos="fade-up">
+        <div class="text-left max-w-2xl">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-bold">Struktur Organisasi</p>
+          <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Dosen Laboratorium GIT</h2>
+          <div class="w-16 h-0.5 bg-teal-light mt-5 mb-4"></div>
+          <p class="text-navy/60 text-sm">Para ahli yang siap membimbing dan berbagi pengalaman industri nyata.</p>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button id="dosen-prev" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Sebelumnya">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button id="dosen-next" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white text-navy border border-navy/10 shadow-sm flex items-center justify-center hover:bg-teal hover:text-white transition disabled:opacity-30 disabled:pointer-events-none" aria-label="Selanjutnya">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="dosen-scroll" class="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 hide-scrollbar">
+        
+        <!-- Dosen 1: Dr. Erwin Hermawan -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Pak Erwin.jpg" alt="Dr. Erwin Hermawan" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Kepala Lab</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Dr. Erwin Hermawan, S.Si., M.Sc. IT.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 1458760661130162</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dosen 2: Sahid Agustian Hudjimartsu -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Pak_Sahid.jpg" alt="Sahid Agustian H" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Dosen Tetap</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Sahid Agustian Hudjimartsu, S.T., M.Kom.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 6149762663138023</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dosen 3: Iksal Yanuarsyah -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Pak_Iksal.jpg" alt="Iksal Yanuarsyah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Dosen Tetap</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Iksal Yanuarsyah, S. Hut., M. Sc. IT.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 2460758659130122</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dosen 4: Fety Fatimah -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Bu_Fety.jpg" alt="Fety Fatimah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Dosen Tetap</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Fety Fatimah, S. Kom., M. Kom.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 2362759660230183</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dosen 5: Nurul Kamilah -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Bu_Berlin.jpg" alt="Nurul Kamilah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Dosen Tetap</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Nurul Kamilah, S.Kom., M.Kom.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 2459764665230223</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dosen 6: Mohammad Aftaf Muhajir -->
+        <div class="snap-start shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group hover-glow">
+          <div class="aspect-[3/4] md:aspect-[4/5] relative overflow-hidden bg-navy/5">
+            <img src="assets/img/dosen/Pak_Aftaf.jpg" alt="Mohammad Aftaf Muhajir" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 bg-gradient-to-t from-navy to-transparent">
+              <div class="text-[7px] md:text-[10px] font-bold text-teal-light uppercase tracking-wider mb-1">Dosen Tetap</div>
+              <h4 class="font-bold text-white text-[10px] md:text-base leading-tight">Mohammad Aftaf Muhajir, S.Si., M.Kom.</h4>
+              <p class="text-[8px] md:text-[11px] text-white/70 mt-0.5">NUPTK: 9251767668131053</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#FFFFFF"/></svg>
+    </div>
+  </section>
+
+  <!-- KARIER -->
+  <section id="karier" class="relative py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-20">
+      <div class="flex flex-col lg:flex-row gap-8 sm:gap-12 items-center">
+        <div data-aos="fade-right" class="lg:w-1/3 text-center lg:text-left w-full">
+          <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-bold">Profil Lulusan</p>
+          <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-navy mb-6 leading-tight tracking-tight">Peluang Karier Lulusan GIT</h2>
+          <div class="w-16 h-0.5 bg-teal-light mx-auto lg:mx-0 mt-5 mb-6"></div>
+          <p class="text-navy/60 text-sm leading-relaxed mb-8">Lulusan GIT memiliki peran vital di instansi pemerintah (seperti BPN, BMKG, Bappenas) hingga perusahaan teknologi pemetaan dan agritech.</p>
+        </div>
+
+        <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
+          <div data-aos="fade-up" data-aos-delay="0" class="bg-soft p-5 sm:p-6 rounded-2xl border border-navy/5 flex items-start gap-3 sm:gap-4 hover-glow">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal shrink-0">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            </div>
+            <div><h4 class="font-bold text-navy mb-1 text-sm sm:text-base">GIS Analyst</h4><p class="text-xs text-navy/60">Menganalisis data spasial untuk perencanaan wilayah, mitigasi bencana, atau sumber daya alam.</p></div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="100" class="bg-soft p-5 sm:p-6 rounded-2xl border border-navy/5 flex items-start gap-3 sm:gap-4 hover-glow">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal shrink-0">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div><h4 class="font-bold text-navy mb-1 text-sm sm:text-base">Remote Sensing Specialist</h4><p class="text-xs text-navy/60">Mengolah data citra satelit dan drone untuk pemantauan cuaca, kebakaran hutan, atau perkebunan.</p></div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="200" class="bg-soft p-5 sm:p-6 rounded-2xl border border-navy/5 flex items-start gap-3 sm:gap-4 hover-glow">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal shrink-0">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </div>
+            <div><h4 class="font-bold text-navy mb-1 text-sm sm:text-base">Surveyor / Geodesist</h4><p class="text-xs text-navy/60">Melakukan pengukuran dan pemetaan lahan presisi tinggi menggunakan alat ukur modern (GNSS/Total Station).</p></div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="300" class="bg-soft p-5 sm:p-6 rounded-2xl border border-navy/5 flex items-start gap-3 sm:gap-4 hover-glow">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-teal shrink-0">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            <div><h4 class="font-bold text-navy mb-1 text-sm sm:text-base">Web GIS Developer</h4><p class="text-xs text-navy/60">Membangun aplikasi pemetaan interaktif berbasis web untuk perusahaan rintisan (startup) atau instansi.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#EAF1F3"/></svg>
+    </div>
+  </section>
+
+  <!-- ============ DOKUMENTASI RISE GIT ============ -->
+  <section id="dokumentasi" class="relative py-16 sm:py-24 bg-soft">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-20">
+      <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16" data-aos="fade-up">
+        <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 font-bold">Profil Lab</p>
+        <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-navy tracking-tight">Dokumentasi RISE GIT</h2>
+        <div class="w-16 h-0.5 bg-teal-light mx-auto mt-5 mb-4"></div>
+        <p class="text-navy/60 text-sm">Sekilas gambaran tentang Laboratorium Geospatial Information Technology (RISE GIT).</p>
+      </div>
+
+      <!-- Grid 6 Kartu (Murni Visual, Tidak Bisa Diklik) -->
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+        
+        <!-- Kartu 1 -->
+        <div data-aos="fade-up" data-aos-delay="0" class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-navy/5 aspect-[4/3] bg-navy/5">
+          <img src="assets/img/drone.webp" alt="Cover GIT" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent"></div>
+          
+        </div>
+
+        <!-- Kartu 2 -->
+        <div data-aos="fade-up" data-aos-delay="50" class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-navy/5 aspect-[4/3] bg-navy/5">
+          <img src="assets/img/git.png" alt="Visi Misi" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent"></div>
+          
+        </div>
+
+        <!-- Kartu 3 -->
+        <div data-aos="fade-up" data-aos-delay="100" class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-navy/5 aspect-[4/3] bg-navy/5">
+          <img src="assets/img/diskus.ng.png" alt="Kurikulum" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent"></div>
+         
+        </div>
+      </div>
+
+      <!-- Satu-satunya Tombol yang Bisa Diklik (Buka PPT) -->
+      <div class="text-center mt-8 sm:mt-12" data-aos="fade-up">
+        <button onclick="openPptModal()" class="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-teal text-white font-semibold text-xs sm:text-sm hover:-translate-y-1 hover:shadow-xl transition-all shadow-lg w-full sm:w-auto">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          More Information
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <p class="text-navy/40 text-[10px] sm:text-xs mt-3 sm:mt-4">Presentasi resmi RISE GIT — Geospatial Information Technology UIKA</p>
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#101C2C"/></svg>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="relative py-16 sm:py-24 overflow-hidden bg-navy">
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 20px 20px;"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-teal rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gold rounded-full filter blur-3xl opacity-10 translate-y-1/2 -translate-x-1/2"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl relative z-20 text-center" data-aos="zoom-in" data-aos-duration="800">
+      <p class="text-[11px] tracking-[0.2em] uppercase text-teal-light mb-3 sm:mb-4 font-bold">Ayo Bergabung</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-5 sm:mb-6">Siap Jadi <span class="text-teal-light">Geospatial Expert</span> Profesional?</h2>
+      <p class="text-white/70 text-sm md:text-base max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">Mulai perjalananmu di peminatan Geospatial Information Technology dan raih karier gemilang di industri pemetaan dan teknologi spasial global.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <a href="https://siakad.uika-bogor.ac.id/spmbfront/jalur-seleksi" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gold text-navy font-semibold text-sm hover:-translate-y-1 hover:shadow-2xl transition-all shadow-lg w-full sm:w-auto">
+          Daftar Sekarang
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="index.html#footer" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white font-medium text-sm hover:bg-white/20 transition w-full sm:w-auto">Hubungi Kami</a>
+      </div>
+    </div>
+    <div class="wave-divider bottom-0 translate-y-[1px]">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,40 C320,120 540,-20 720,40 C900,100 1120,-20 1440,50 L1440,100 L0,100 Z" fill="#101C2C"/></svg>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" class="bg-navy text-soft relative pt-12 sm:pt-16 pb-6 sm:pb-8">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 mb-8 sm:mb-12">
+        <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="0">
+          <div class="flex items-center gap-3 sm:gap-4 mb-6">
+            <img src="assets/img/logo/uika.png" alt="Logo UIKA" class="w-12 h-12 sm:w-14 sm:h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+            <img src="assets/img/logo/prodi.png" alt="Logo TI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+            <img src="assets/img/logo/hima.png" alt="Logo HIMA" class="w-12 h-12 sm:w-14 sm:h-14 object-contain bg-white rounded-full p-1 shadow-sm" />
+          </div>
+          <div class="mb-6">
+            <div class="font-bold text-lg text-white">Teknik Informatika</div>
+            <div class="text-[10px] text-soft/60 uppercase tracking-wider mb-3">Universitas Ibn Khaldun Bogor</div>
+            <p class="text-sm text-soft/60 leading-relaxed">Mencetak talenta digital yang unggul, inovatif, dan berintegritas untuk masa depan teknologi.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="https://www.instagram.com/uika_bogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="Facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="YouTube">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@uikabogor" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="TikTok">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/school/universitas-ibn-khaldun-bogor/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+<a href="https://wa.me/62816731857" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-teal-light hover:border-teal-light transition hover:scale-110" aria-label="WhatsApp">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2" data-aos="fade-up" data-aos-delay="100">
+          <h4 class="font-bold text-sm mb-4 sm:mb-5 uppercase tracking-wider text-white">Navigasi</h4>
+          <ul class="space-y-2 sm:space-y-3 text-sm text-soft/60">
+            <li><a href="#hero" class="hover:text-teal-light transition">Beranda</a></li>
+            <li><a href="#tentang" class="hover:text-teal-light transition">Tentang GIT</a></li>
+            <li><a href="#kurikulum" class="hover:text-teal-light transition">Kurikulum</a></li>
+            <li><a href="index.html" class="hover:text-teal-light transition">Landing Page</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-2" data-aos="fade-up" data-aos-delay="200">
+          <h4 class="font-bold text-sm mb-4 sm:mb-5 uppercase tracking-wider text-white">Peminatan</h4>
+          <ul class="space-y-2 sm:space-y-3 text-sm text-soft/60">
+            <li><a href="lab-se.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab SE</a></li>
+            <li><a href="lab-csn.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab CSN</a></li>
+            <li><a href="lab-git.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab GIT</a></li>
+            <li><a href="lab-keris.html" class="hover:text-teal-light transition flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-teal-light/50"></span>Lab KERIS</a></li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="300">
+          <h4 class="font-bold text-sm mb-4 sm:mb-5 uppercase tracking-wider text-white">Lokasi & Kontak</h4>
+          <a href="https://www.google.com/maps/search/?api=1&query=Universitas+Ibn+Khaldun+Bogor" target="_blank" rel="noopener noreferrer" class="block relative group rounded-xl overflow-hidden mb-4 border border-white/10 hover:border-teal-light transition shadow-lg">
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Peta UIKA Bogor" class="w-full h-32 sm:h-36 object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" />
+            <div class="absolute inset-0 bg-navy/40 flex items-center justify-center">
+              <span class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full bg-white text-navy font-bold text-[10px] sm:text-xs shadow-lg transform translate-y-2 group-hover:translate-y-0 transition">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Buka Google Maps
+              </span>
+            </div>
+          </a>
+          <ul class="space-y-2 sm:space-y-3 text-sm text-soft/60">
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-teal-light shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span class="text-xs sm:text-sm">Jl. K.H. Sholeh Iskandar Km. 2,<br>Kedung Badak, Bogor 16162</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-teal-light shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <a href="mailto:ti@uika-bogor.ac.id" class="hover:text-teal-light transition text-xs sm:text-sm">ti@uika-bogor.ac.id</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-6 sm:pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-[10px] sm:text-xs text-soft/40 gap-3 sm:gap-4 text-center md:text-left">
+        <div>© 2026 Teknik Informatika — Universitas Ibn Khaldun Bogor. All rights reserved.</div>
+        <div class="flex items-center gap-2">
+          <span>Geospatial Information Technology</span>
+          <span class="w-1 h-1 rounded-full bg-teal-light/50"></span>
+          <span>Peminatan Unggulan</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ MODAL PPT (GOOGLE DRIVE VIEWER) ============ -->
+  <div id="pptModal" class="ppt-modal fixed inset-0 z-[300] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-navy/95 backdrop-blur-md">
+    <!-- Tombol Close -->
+    <button onclick="closePptModal()" class="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-full flex items-center justify-center transition shadow-lg" aria-label="Tutup">
+      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <!-- Header info -->
+    <div class="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 z-20 hidden sm:flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur border border-white/20">
+      <span class="w-2 h-2 rounded-full bg-teal-light animate-pulse"></span>
+      <span class="text-[10px] sm:text-xs font-semibold text-white">RISE GIT — Profile PPT</span>
+    </div>
+
+    <!-- Konten Modal -->
+    <div class="ppt-modal-content w-full max-w-6xl h-[90vh] sm:h-[90vh] bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col relative">
+      <!-- Header bar -->
+      <div class="bg-navy text-white px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between shrink-0 gap-2">
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-teal-light/20 flex items-center justify-center shrink-0">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div class="min-w-0">
+            <h3 class="ppt-modal-header-title font-bold text-xs sm:text-sm leading-tight truncate">PPT_GIT — RISE GIT</h3>
+            <p class="ppt-modal-header-sub text-[9px] sm:text-[10px] text-white/60 truncate">Profile • Geospatial Information Technology UIKA</p>
+          </div>
+        </div>
+        <a href="https://drive.google.com/file/d/147tZY5nHAuqFmfXeNdgNxJvKK_9XZ_3S/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-medium transition shrink-0">
+          Buka di Google Drive
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+
+      <!-- Iframe Google Drive Viewer -->
+      <div class="flex-1 relative bg-gray-100 min-h-0">
+        <div id="pptLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-10">
+          <div class="ppt-spinner w-10 h-10 sm:w-12 sm:h-12 rounded-full mb-3 sm:mb-4"></div>
+          <p class="text-xs sm:text-sm text-navy/60 px-4 text-center">Memuat presentasi...</p>
+        </div>
+
+        <iframe 
+          id="pptIframe"
+          src="" 
+          class="w-full h-full border-0 relative z-20"
+          allow="autoplay"
+          onload="document.getElementById('pptLoader').style.display='none'">
+        </iframe>
+      </div>
+
+      <!-- Footer -->
+      <div class="bg-soft px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between shrink-0 border-t border-navy/10 gap-2">
+        <p class="text-[10px] sm:text-[11px] text-navy/50 hidden sm:block">Scroll di dalam presentasi untuk berpindah halaman</p>
+        <a href="https://drive.google.com/file/d/147tZY5nHAuqFmfXeNdgNxJvKK_9XZ_3S/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold text-teal hover:text-teal-light transition inline-flex items-center gap-1">
+          Buka di tab baru
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK TO TOP -->
+  <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[140] w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-teal text-white shadow-xl flex items-center justify-center border-2 border-white hover:scale-110 transition" aria-label="Kembali ke atas">
+    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+  </button>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true, offset: 80, easing: 'ease-out-cubic' });
+
+    const scrollProgress = document.getElementById('scrollProgress');
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress.style.width = (scrollTop / docHeight) * 100 + '%';
+      if (scrollTop > 500) backToTop.classList.add('show');
+      else backToTop.classList.remove('show');
+    });
+
+    const dosenScroll = document.getElementById('dosen-scroll');
+    const dosenPrevBtn = document.getElementById('dosen-prev');
+    const dosenNextBtn = document.getElementById('dosen-next');
+    function getDosenScrollAmount() {
+      const firstCard = dosenScroll.querySelector('div');
+      if (!firstCard) return 200;
+      return firstCard.offsetWidth + 12;
+    }
+    dosenNextBtn.addEventListener('click', () => dosenScroll.scrollBy({ left: getDosenScrollAmount(), behavior: 'smooth' }));
+    dosenPrevBtn.addEventListener('click', () => dosenScroll.scrollBy({ left: -getDosenScrollAmount(), behavior: 'smooth' }));
+    dosenScroll.addEventListener('scroll', () => {
+      if (dosenScroll.scrollLeft <= 0) dosenPrevBtn.classList.add('opacity-30', 'pointer-events-none');
+      else dosenPrevBtn.classList.remove('opacity-30', 'pointer-events-none');
+      if (dosenScroll.scrollLeft + dosenScroll.clientWidth >= dosenScroll.scrollWidth - 5) dosenNextBtn.classList.add('opacity-30', 'pointer-events-none');
+      else dosenNextBtn.classList.remove('opacity-30', 'pointer-events-none');
+    });
+    dosenScroll.dispatchEvent(new Event('scroll'));
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconHamburger = document.getElementById('icon-hamburger');
+    const iconClose = document.getElementById('icon-close');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      iconHamburger.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconHamburger.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
+
+    // ==== MODAL PPT ====
+    const pptModal = document.getElementById('pptModal');
+    const pptIframe = document.getElementById('pptIframe');
+    const pptLoader = document.getElementById('pptLoader');
+    const PPT_URL = 'https://drive.google.com/file/d/147tZY5nHAuqFmfXeNdgNxJvKK_9XZ_3S/preview';
+    let pptLoaded = false;
+
+    function openPptModal() {
+      pptModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      if (!pptLoaded) {
+        pptLoader.style.display = 'flex';
+        pptIframe.src = PPT_URL;
+        pptLoaded = true;
+      }
+    }
+
+    function closePptModal() {
+      pptModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    pptModal.addEventListener('click', (e) => {
+      if (e.target === pptModal) closePptModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && pptModal.classList.contains('active')) {
+        closePptModal();
+      }
+    });
+  </script>
+</body>
+</html>
