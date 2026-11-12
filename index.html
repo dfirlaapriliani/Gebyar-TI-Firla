@@ -588,10 +588,20 @@
             Dengan dukungan dosen berpengalaman dan fasilitas laboratorium modern, kami siap mencetak lulusan yang siap bersaing di kancah global.
           </p>
 
-          <button onclick="openStrukturModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-teal/10 text-teal text-sm font-semibold hover:bg-teal hover:text-white transition duration-300 mb-8">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <button onclick="openStrukturModal()" class="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-teal text-white text-sm font-semibold shadow-md hover:bg-teal-light hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 mb-8 w-full sm:w-auto">
+            <!-- Ikon Grid -->
+            <svg class="w-5 h-5 group-hover:rotate-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            
+            <!-- Teks -->
             Lihat Struktur Organisasi
-          </button>
+            
+            <!-- Ikon Panah Kanan (muncul pas di-hover) -->
+            <svg class="w-4 h-4 ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+            </button>
 
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm">
@@ -885,7 +895,7 @@
             </div>
             <!-- Dosen 3 -->
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
-              <img src="assets/img/dosen/Pak_Hendri.jpg" alt="Ade Hendri Hendrawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <img src="assets/img/dosen/Pak_Ade.jpg" alt="Ade Hendri Hendrawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
               <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
                 <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Ade Hendri Hendrawan, S.Kom., M.Kom.</h4>
                 <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 3335746647130093</div>
@@ -907,7 +917,7 @@
           <div class="min-w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <!-- Dosen 5 -->
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 aspect-[3/4] relative group hover-glow">
-              <img src="assets/img/dosen/Pak_Erwin.jpg" alt="Dr. Erwin Hermawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <img src="assets/img/dosen/Pak Erwin.jpg" alt="Dr. Erwin Hermawan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
               <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 pt-8 sm:pt-10 bg-gradient-to-t from-navy to-transparent text-left">
                 <h4 class="font-semibold text-[10px] sm:text-sm text-white mb-1 leading-tight">Dr. Erwin Hermawan, S.Si., M. Sc. IT.</h4>
                 <div class="text-[8px] sm:text-[10px] font-medium text-teal-light mb-1 sm:mb-2">NUPTK: 1458760661130162</div>
