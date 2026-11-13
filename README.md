@@ -1,6 +1,6 @@
 # Tugas Web Profile - Teknik Informatika UIKA
 
-Halo, ini adalah proyek website Major Profile untuk Program Studi Teknik Informatika UIKA Bogor. Website ini aku buat untuk keperluan lomba.
+Proyek ini merupakan website *Major Profile* untuk Program Studi Teknik Informatika, Universitas Ibn Khaldun Bogor. Website dikembangkan sebagai karya untuk keperluan kompetisi.
 
 ## Identitas Pembuat
 - **Nama:** D Firla Apriliani
@@ -10,18 +10,18 @@ Halo, ini adalah proyek website Major Profile untuk Program Studi Teknik Informa
 - **Kelas:** TI REG 1A
 
 ## Konsep Pembuatan Website
-Konsep utama website ini adalah *single-file approach* atau menggabungkan semuanya ke dalam satu file. Aku sengaja nggak pakai file CSS dan JS terpisah (seperti `style.css` atau `script.js`). 
+Konsep utama arsitektur website ini adalah *single-file approach*, yaitu menggabungkan seluruh struktur HTML, *styling* CSS, dan logika JavaScript ke dalam satu file utama tanpa memisahkannya ke dalam file eksternal (seperti `style.css` atau `script.js`).
 
-Semua kode CSS kustom aku taruh di dalam tag `<style>` di bagian `<head>`, dan semua logika JavaScript aku taruh di dalam tag `<script>` di bagian paling bawah sebelum `</body>`.
+Seluruh kode CSS kustom diletakkan di dalam tag `<style>` pada bagian `<head>`, dan seluruh logika JavaScript ditempatkan di dalam tag `<script>` pada bagian akhir sebelum penutup tag `</body>`.
 
-### Kenapa Dibuat Seperti Itu?
-1. **Biar Aman Pas Dinilai:** Pas juri buka filenya atau pas di-hosting, nggak bakal ada error kayak *styling* ilang atau *script* nggak jalan gara-gara salah path.
-2. **Praktis:** Cuma butuh satu file HTML buat jalanin semuanya. Tinggal dobel klik, langsung kebuka di browser tanpa perlu setting *local server*.
-3. **Gampang Dicek:** Juri tinggal *scroll* ke bawah atau pencet *inspect element* buat lihat langsung kode HTML, CSS, sama JS-nya tanpa harus pindah-pindah file.
-4. **Tampilan Tetap Terjaga:** Karena layout dan desainnya aku kunci pake CSS, tampilannya nggak bakal berubah atau berantakan walaupun dibuka di device atau browser yang beda-beda.
+### Alasan Penerapan Konsep Single-File:
+1. **Zero Dependency (Tanpa Ketergantungan Eksternal):** Meminimalisir risiko kegagalan pemuatan aset (*file not found* atau *404 error*) yang sering terjadi akibat kesalahan penulisan *path* direktori saat proses *deployment*.
+2. **Portabilitas Tinggi:** Website dapat dijalankan secara instan hanya dengan membuka file HTML melalui *web browser*, tanpa memerlukan konfigurasi *local server* tambahan.
+3. **Kemudahan Audit Kode:** Mempermudah proses peninjauan struktur kode karena HTML, CSS, dan JavaScript dapat dilihat secara langsung pada satu file yang sama.
+4. **Konsistensi Tampilan:** Desain dan tata letak (*layout*) dikunci menggunakan CSS internal sehingga konsistensi visual tetap terjaga di berbagai ukuran layar dan *browser*.
 
 ## Struktur Folder
-Meskipun CSS dan JS digabung ke dalam HTML, file gambar tetap aku pisahin ke dalam folder `assets` biar rapi. Struktur foldernya seperti ini:
+Meskipun CSS dan JS digabung ke dalam HTML, aset berupa gambar tetap dipisahkan ke dalam folder `assets` untuk menjaga kerapian struktur proyek. Struktur foldernya adalah sebagai berikut:
 
 ```text
 proyek-ti-uika/
